@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "163034165304",
+    "project_id": "k3-app",
+    "storage_bucket": "k3-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163034165304:android:445b6f3be14670fefe36cd",
+        "android_client_info": {
+          "package_name": "com.example.k3secure"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp5gwq2kLBtho9zAvuMoHmYuBLi52mhzU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
