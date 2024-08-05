@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:k3secure/controllers/PeminjamanApdController.dart';
+import 'package:k3secure/pages/Menu/dashboard_page.dart';
 import 'package:k3secure/pages/PeminjamanAPD/datapeminjamanapd_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
@@ -68,306 +69,324 @@ class _AddPeminjamanAPDPageState extends State<AddPeminjamanAPDPage> {
     // controller.jumlahDipinjamController.clear();
     // controller.tanggalPeminjamanController.clear();
     // controller.tanggalPengembalianController.clear();
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.orange,
-        centerTitle: true,
-        title: const Text('Tambah Peminjaman APD'),
-      ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      CircleAvatar(
-                        backgroundColor: Colors.blue,
-                        radius: 50,
-                        child: Image.asset('assets/apd-${nama_apd}.png'),
-                      ),
-                      const SizedBox(height: 20),
-                      Card(
-                        color: Colors.white,
-                        elevation: 2,
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 40,
-                                child: Row(
-                                  children: [
-                                    const SizedBox(
-                                        width: 50, child: Text('ID :')),
-                                    Expanded(
-                                      child: SizedBox(
-                                        height: 30,
-                                        child: TextFormField(
-                                          controller: id_peminjaman,
-                                          keyboardType: TextInputType.number,
-                                          decoration: const InputDecoration(
-                                              border: InputBorder.none,
-                                              // hintText: 'Masukan ID',
-                                              suffixIcon: Icon(
-                                                Icons.edit,
-                                                size: 20,
-                                              )),
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return "Tolong masukan data";
-                                            }
-                                            return null;
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 40,
-                                child: Row(
-                                  children: [
-                                    const SizedBox(
-                                        width: 50, child: Text('Email :')),
-                                    Expanded(
-                                      child: SizedBox(
-                                        height: 25,
-                                        child: TextFormField(
-                                          controller: email,
-                                          decoration: const InputDecoration(
-                                            border: InputBorder.none,
-                                            suffixIcon: Icon(
-                                              Icons.edit,
-                                              size: 20,
-                                            ),
-                                            // hintText: 'Masukan email',
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DashboardPage(),
+            ),
+            (route) => false);
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.orange,
+          centerTitle: true,
+          title: const Text('Tambah Peminjaman APD'),
+        ),
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        CircleAvatar(
+                          backgroundColor: Colors.blue,
+                          radius: 50,
+                          child: Image.asset('assets/apd-${nama_apd}.png'),
+                        ),
+                        const SizedBox(height: 20),
+                        Card(
+                          color: Colors.white,
+                          elevation: 2,
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 40,
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(
+                                          width: 50, child: Text('ID :')),
+                                      Expanded(
+                                        child: SizedBox(
+                                          height: 30,
+                                          child: TextFormField(
+                                            controller: id_peminjaman,
+                                            keyboardType: TextInputType.number,
+                                            decoration: const InputDecoration(
+                                                border: InputBorder.none,
+                                                // hintText: 'Masukan ID',
+                                                suffixIcon: Icon(
+                                                  Icons.edit,
+                                                  size: 20,
+                                                )),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return "Tolong masukan data";
+                                              }
+                                              return null;
+                                            },
                                           ),
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return "Tolong masukan data";
-                                            }
-                                            return null;
-                                          },
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 40,
-                                child: Row(
-                                  children: [
-                                    const SizedBox(
-                                        width: 100, child: Text('Nama APD :')),
-                                    Expanded(
-                                        child: Padding(
-                                      padding: const EdgeInsets.only(right: 10),
-                                      child: DropdownButton(
-                                          isExpanded: true,
-                                          value: nama_apd,
-                                          underline: const SizedBox(),
-                                          items: const [
-                                            DropdownMenuItem(
-                                              child: Text('Helm'),
-                                              value: 'Helm',
-                                            ),
-                                            DropdownMenuItem(
-                                              child: Text('Penutup Telinga'),
-                                              value: 'Penutup Telinga',
-                                            ),
-                                            DropdownMenuItem(
-                                              child: Text('Rompi'),
-                                              value: 'Rompi',
-                                            ),
-                                            DropdownMenuItem(
-                                              child: Text('Sepatu'),
-                                              value: 'Sepatu',
-                                            ),
-                                          ],
-                                          onChanged: (val) {
-                                            setState(() {
-                                              nama_apd = val.toString();
-                                            });
-                                          }),
-                                    )),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 40,
-                                child: Row(
-                                  children: [
-                                    const SizedBox(
-                                        width: 170,
-                                        child: Text('Jumlah Peminjaman :')),
-                                    Expanded(
-                                      child: SizedBox(
-                                        height: 30,
-                                        child: TextFormField(
-                                          controller: jumlah_peminjaman,
-                                          keyboardType: TextInputType.number,
-                                          cursorHeight: 20,
-                                          decoration: const InputDecoration(
+                                SizedBox(
+                                  height: 40,
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(
+                                          width: 50, child: Text('Email :')),
+                                      Expanded(
+                                        child: SizedBox(
+                                          height: 25,
+                                          child: TextFormField(
+                                            controller: email,
+                                            decoration: const InputDecoration(
                                               border: InputBorder.none,
-                                              isDense: true,
                                               suffixIcon: Icon(
                                                 Icons.edit,
                                                 size: 20,
-                                              )),
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return "Tolong masukan data";
-                                            }
-                                            return null;
-                                          },
+                                              ),
+                                              // hintText: 'Masukan email',
+                                            ),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return "Tolong masukan data";
+                                              }
+                                              return null;
+                                            },
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 40,
-                                child: Row(
-                                  children: [
-                                    const SizedBox(
-                                        width: 185,
-                                        child: Text('Tanggal Peminjaman :')),
-                                    Expanded(
-                                        child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(tanggal_peminjaman),
-                                        IconButton(
-                                            onPressed: () async {
-                                              DateTime? pickedDate =
-                                                  await showDatePicker(
-                                                      context: context,
-                                                      initialDate:
-                                                          DateTime.now(),
-                                                      firstDate: DateTime(2023),
-                                                      lastDate: DateTime(2100));
-
-                                              if (pickedDate != null) {
-                                                String formattedDate =
-                                                    DateFormat('dd-MM-yyyy')
-                                                        .format(pickedDate);
-
-                                                setState(() {
-                                                  tanggal_peminjaman =
-                                                      formattedDate; //set output date to TextField value.
-                                                });
-                                              } else {}
+                                SizedBox(
+                                  height: 40,
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(
+                                          width: 100,
+                                          child: Text('Nama APD :')),
+                                      Expanded(
+                                          child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10),
+                                        child: DropdownButton(
+                                            isExpanded: true,
+                                            value: nama_apd,
+                                            underline: const SizedBox(),
+                                            items: const [
+                                              DropdownMenuItem(
+                                                child: Text('Helm'),
+                                                value: 'Helm',
+                                              ),
+                                              DropdownMenuItem(
+                                                child: Text('Penutup Telinga'),
+                                                value: 'Penutup Telinga',
+                                              ),
+                                              DropdownMenuItem(
+                                                child: Text('Rompi'),
+                                                value: 'Rompi',
+                                              ),
+                                              DropdownMenuItem(
+                                                child: Text('Sepatu'),
+                                                value: 'Sepatu',
+                                              ),
+                                            ],
+                                            onChanged: (val) {
+                                              setState(() {
+                                                nama_apd = val.toString();
+                                              });
+                                            }),
+                                      )),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(
+                                          width: 170,
+                                          child: Text('Jumlah Peminjaman :')),
+                                      Expanded(
+                                        child: SizedBox(
+                                          height: 30,
+                                          child: TextFormField(
+                                            controller: jumlah_peminjaman,
+                                            keyboardType: TextInputType.number,
+                                            cursorHeight: 20,
+                                            decoration: const InputDecoration(
+                                                border: InputBorder.none,
+                                                isDense: true,
+                                                suffixIcon: Icon(
+                                                  Icons.edit,
+                                                  size: 20,
+                                                )),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return "Tolong masukan data";
+                                              }
+                                              return null;
                                             },
-                                            icon: const Icon(
-                                              Icons.calendar_month,
-                                              color: Colors.grey,
-                                            ))
-                                      ],
-                                    )),
-                                  ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 40,
-                                child: Row(
-                                  children: [
-                                    const SizedBox(
-                                        width: 185,
-                                        child: Text('Tanggal Pengembalian :')),
-                                    Expanded(
-                                        child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(tanggal_pengembalian),
-                                        IconButton(
-                                            onPressed: () async {
-                                              DateTime? pickedDate =
-                                                  await showDatePicker(
-                                                      context: context,
-                                                      initialDate:
-                                                          DateTime.now(),
-                                                      firstDate: DateTime(2023),
-                                                      lastDate: DateTime(2100));
+                                SizedBox(
+                                  height: 40,
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(
+                                          width: 185,
+                                          child: Text('Tanggal Peminjaman :')),
+                                      Expanded(
+                                          child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(tanggal_peminjaman),
+                                          IconButton(
+                                              onPressed: () async {
+                                                DateTime? pickedDate =
+                                                    await showDatePicker(
+                                                        context: context,
+                                                        initialDate:
+                                                            DateTime.now(),
+                                                        firstDate:
+                                                            DateTime(2023),
+                                                        lastDate:
+                                                            DateTime(2100));
 
-                                              if (pickedDate != null) {
-                                                String formattedDate =
-                                                    DateFormat('dd-MM-yyyy')
-                                                        .format(pickedDate);
+                                                if (pickedDate != null) {
+                                                  String formattedDate =
+                                                      DateFormat('dd-MM-yyyy')
+                                                          .format(pickedDate);
 
-                                                setState(() {
-                                                  tanggal_pengembalian =
-                                                      formattedDate; //set output date to TextField value.
-                                                });
-                                              } else {}
-                                            },
-                                            icon: const Icon(
-                                              Icons.calendar_month,
-                                              color: Colors.grey,
-                                            ))
-                                      ],
-                                    )),
-                                  ],
+                                                  setState(() {
+                                                    tanggal_peminjaman =
+                                                        formattedDate; //set output date to TextField value.
+                                                  });
+                                                } else {}
+                                              },
+                                              icon: const Icon(
+                                                Icons.calendar_month,
+                                                color: Colors.grey,
+                                              ))
+                                        ],
+                                      )),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                                SizedBox(
+                                  height: 40,
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(
+                                          width: 185,
+                                          child:
+                                              Text('Tanggal Pengembalian :')),
+                                      Expanded(
+                                          child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(tanggal_pengembalian),
+                                          IconButton(
+                                              onPressed: () async {
+                                                DateTime? pickedDate =
+                                                    await showDatePicker(
+                                                        context: context,
+                                                        initialDate:
+                                                            DateTime.now(),
+                                                        firstDate:
+                                                            DateTime(2023),
+                                                        lastDate:
+                                                            DateTime(2100));
+
+                                                if (pickedDate != null) {
+                                                  String formattedDate =
+                                                      DateFormat('dd-MM-yyyy')
+                                                          .format(pickedDate);
+
+                                                  setState(() {
+                                                    tanggal_pengembalian =
+                                                        formattedDate; //set output date to TextField value.
+                                                  });
+                                                } else {}
+                                              },
+                                              icon: const Icon(
+                                                Icons.calendar_month,
+                                                color: Colors.grey,
+                                              ))
+                                        ],
+                                      )),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () async {
-                          // if (_formKey.currentState?.validate() ?? false) {
-                          //   peminjamanApdController
-                          //       .updatePeminjamanApd(peminjamanApd)
-                          //       .then((value) {
-                          //     if (value) {
-                          //       Get.to(() => DataPeminjamanAPDPage());
-                          //     } else {
-                          //       // Penanganan kesalahan jika pembaruan gagal.
-                          //     }
-                          //   });
-                          // }
-                          tambahData();
-                          await Future.delayed(
-                            const Duration(seconds: 2),
-                            () {
-                              setState(() {
-                                isLoading = false;
-                              });
-                            },
-                          );
-                          // ignore: use_build_context_synchronously
-                        },
-                        child: const Text('Tambah Data Peminjaman APD'),
-                      ),
-                    ],
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () async {
+                            // if (_formKey.currentState?.validate() ?? false) {
+                            //   peminjamanApdController
+                            //       .updatePeminjamanApd(peminjamanApd)
+                            //       .then((value) {
+                            //     if (value) {
+                            //       Get.to(() => DataPeminjamanAPDPage());
+                            //     } else {
+                            //       // Penanganan kesalahan jika pembaruan gagal.
+                            //     }
+                            //   });
+                            // }
+                            tambahData();
+                            await Future.delayed(
+                              const Duration(seconds: 2),
+                              () {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              },
+                            );
+                            // ignore: use_build_context_synchronously
+                          },
+                          child: const Text('Tambah Data Peminjaman APD'),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          isLoading == false
-              ? const SizedBox()
-              : const Center(
-                  child: SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-        ],
+              ],
+            ),
+            isLoading == false
+                ? const SizedBox()
+                : const Center(
+                    child: SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+          ],
+        ),
       ),
     );
   }
@@ -434,24 +453,26 @@ class _AddPeminjamanAPDPageState extends State<AddPeminjamanAPDPage> {
           });
 
           final order = PeminjamanAPDModel(
-            id: int.parse(id_peminjaman.text),
-            user: email.text,
-            nama_apd: nama_apd,
-            jumlah_peminjaman: int.parse(jumlah_peminjaman.text),
-            tanggal_peminjaman: tanggal_peminjaman,
-            tanggal_pengembalian: tanggal_pengembalian,
-          );
+              id: int.parse(id_peminjaman.text),
+              user: email.text,
+              nama_apd: nama_apd,
+              jumlah_peminjaman: int.parse(jumlah_peminjaman.text),
+              tanggal_peminjaman: tanggal_peminjaman,
+              tanggal_pengembalian: tanggal_pengembalian,
+              createdAtMonth: DateFormat('MM').format(DateTime.now()),
+              createdAtYear: DateFormat('yyyy').format(DateTime.now()));
           final json = order.toJson();
           await docPeminjamanAPD.set(json);
 
           final history = PeminjamanAPDModel(
-            id: 0,
-            user: email.text,
-            nama_apd: nama_apd,
-            jumlah_peminjaman: int.parse(jumlah_peminjaman.text),
-            tanggal_peminjaman: tanggal_peminjaman,
-            tanggal_pengembalian: tanggal_pengembalian,
-          );
+              id: 0,
+              user: email.text,
+              nama_apd: nama_apd,
+              jumlah_peminjaman: int.parse(jumlah_peminjaman.text),
+              tanggal_peminjaman: tanggal_peminjaman,
+              tanggal_pengembalian: tanggal_pengembalian,
+              createdAtMonth: DateFormat('MM').format(DateTime.now()),
+              createdAtYear: DateFormat('yyyy').format(DateTime.now()));
           final jsonHistory = history.toJson();
           await docHistory.set(jsonHistory);
 
@@ -474,16 +495,24 @@ class _AddPeminjamanAPDPageState extends State<AddPeminjamanAPDPage> {
 }
 
 class PeminjamanAPDModel {
-  final String user, nama_apd, tanggal_peminjaman, tanggal_pengembalian;
+  final String user,
+      nama_apd,
+      tanggal_peminjaman,
+      tanggal_pengembalian,
+      createdAtMonth,
+      createdAtYear;
   final int id, jumlah_peminjaman;
 
-  PeminjamanAPDModel(
-      {required this.user,
-      required this.nama_apd,
-      required this.tanggal_peminjaman,
-      required this.tanggal_pengembalian,
-      required this.id,
-      required this.jumlah_peminjaman});
+  PeminjamanAPDModel({
+    required this.user,
+    required this.nama_apd,
+    required this.tanggal_peminjaman,
+    required this.tanggal_pengembalian,
+    required this.id,
+    required this.jumlah_peminjaman,
+    required this.createdAtMonth,
+    required this.createdAtYear,
+  });
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -492,5 +521,7 @@ class PeminjamanAPDModel {
         'jumlah_peminjaman': jumlah_peminjaman,
         'tanggal_peminjaman': tanggal_peminjaman,
         'tanggal_pengembalian': tanggal_pengembalian,
+        'createdAtMonth': createdAtMonth,
+        'createdAtYear': createdAtYear,
       };
 }

@@ -12,9 +12,11 @@ import 'package:k3secure/pages/Menu/RiwayatPage/riwayat_page.dart';
 import 'package:k3secure/pages/P3K/datap3k_page.dart';
 import 'package:k3secure/pages/P3K/tambahp3k_page.dart';
 import 'package:k3secure/pages/PeminjamanAPD/datapeminjamanapd_page.dart';
+import 'package:k3secure/pages/PeminjamanAPD/tambahpeminjamanapd.dart';
 import 'package:k3secure/pages/PenggunaanP3K/datapenggunaanp3k_page.dart';
 import 'package:k3secure/pages/welcome_page.dart';
 import '../pages/AuthPage/register_page.dart';
+import '../pages/PenggunaanP3K/tambahpenggunaanp3k_page.dart';
 part 'app_routes.dart';
 
 class AppPages {
@@ -78,6 +80,16 @@ class AppPages {
     GetPage(
       name: _Paths.AddP3KPage,
       page: () => AddP3KPage(),
+      binding: K3SecureBindings(),
+    ),
+    GetPage(
+      name: _Paths.AddPeminjamanAPDPage,
+      page: () => AddPeminjamanAPDPage(),
+      binding: K3SecureBindings(),
+    ),
+    GetPage(
+      name: _Paths.AddPenggunaanP3KPage,
+      page: () => AddPenggunaanP3KPage(),
       binding: K3SecureBindings(),
     ),
     GetPage(

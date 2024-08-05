@@ -2,54 +2,27 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:k3secure/constant/constant.dart';
-import 'package:k3secure/controllers/PenggunaanP3KController.dart';
 import 'package:k3secure/pages/PenggunaanP3K/editpenggunaanp3k_page.dart';
+import 'package:k3secure/pages/PenggunaanP3K/exportpdfp3k.dart';
 import 'package:k3secure/pages/PenggunaanP3K/tambahpenggunaanp3k_page.dart';
 import 'package:k3secure/pages/Widget/data_empty.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 import '../../Models/PenggunaanP3K.dart';
 
-class DataPenggunaanP3KPage extends GetView<PenggunaanP3KController> {
+class DataPenggunaanP3KPage extends StatefulWidget {
+  @override
+  State<DataPenggunaanP3KPage> createState() => _DataPenggunaanP3KPageState();
+}
+
+class _DataPenggunaanP3KPageState extends State<DataPenggunaanP3KPage> {
   Future<void> hapusPenggunaanP3K(
       DataPenggunaanP3K penggunaanP3K, BuildContext context) async {
     // Tampilkan dialog konfirmasi
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Konfirmasi Hapus Data'),
-          content: Text(
-              'Apakah Anda yakin ingin menghapus data penggunaan P3K ini?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Tutup dialog
-              },
-              child: Text('Tidak'),
-            ),
-            TextButton(
-              onPressed: () async {
-                final bool berhasil =
-                    await controller.deletePenggunaanP3K(penggunaanP3K);
-                Navigator.of(context).pop(); // Tutup dialog
-
-                if (berhasil) {
-                  Get.snackbar('Sukses', 'Data penggunaan P3K berhasil dihapus',
-                      backgroundColor: Colors.green, colorText: Colors.white);
-                  // Panggil ulang permintaan data setelah penghapusan
-                  await controller.fetchPenggunaanP3KList();
-                } else {
-                  Get.snackbar('Gagal', 'Gagal menghapus data penggunaan P3K',
-                      backgroundColor: Colors.red, colorText: Colors.white);
-                }
-              },
-              child: Text('Ya'),
-            ),
-          ],
-        );
-      },
-    );
   }
+
+  var chooseMonthYear;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +37,34 @@ class DataPenggunaanP3KPage extends GetView<PenggunaanP3KController> {
             Navigator.pushReplacementNamed(context, '/dashboard');
           },
         ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              chooseMonthYear = await showMonthYearPicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2024),
+                  lastDate: DateTime(2027),
+                  initialMonthYearPickerMode: MonthYearPickerMode.month);
+              if (chooseMonthYear != null) {
+                chooseMonthYear =
+                    DateFormat('dd-MM-yyyy').format(chooseMonthYear);
+
+                // ignore: use_build_context_synchronously
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ExportPdfP3K(monthYear: chooseMonthYear.toString()),
+                    ));
+              }
+            },
+            icon: Icon(
+              Icons.picture_as_pdf,
+              color: Colors.red,
+            ),
+          ),
+        ],
       ),
       // body: FutureBuilder(
       //   future: controller.fetchPenggunaanP3KList(),

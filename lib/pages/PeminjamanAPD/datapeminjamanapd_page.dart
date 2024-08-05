@@ -1,55 +1,30 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:k3secure/constant/constant.dart';
 import 'package:k3secure/controllers/PeminjamanApdController.dart';
+import 'package:k3secure/pages/PeminjamanAPD/exportpdfapd.dart';
 import 'package:k3secure/pages/PeminjamanAPD/editpeminjamanapd.dart';
 import 'package:k3secure/pages/PeminjamanAPD/tambahpeminjamanapd.dart';
 import 'package:k3secure/pages/Widget/data_empty.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 import '../../Models/PeminjamanAPD.dart';
 
-class DataPeminjamanAPDPage extends GetView<PeminjamanApdController> {
+class DataPeminjamanAPDPage extends StatefulWidget {
+  @override
+  State<DataPeminjamanAPDPage> createState() => _DataPeminjamanAPDPageState();
+}
+
+class _DataPeminjamanAPDPageState extends State<DataPeminjamanAPDPage> {
   Future<void> hapusPeminjamanAPD(
       DataPeminjaman peminjamanapd, BuildContext context) async {
     // Tampilkan dialog konfirmasi
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Konfirmasi Hapus Data'),
-          content: const Text(
-              'Apakah Anda yakin ingin menghapus data peminjaman APD ini?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Tutup dialog
-              },
-              child: const Text('Tidak'),
-            ),
-            TextButton(
-              onPressed: () async {
-                final bool berhasil =
-                    await controller.deletePeminjamanApd(peminjamanapd);
-                Navigator.of(context).pop();
-
-                if (berhasil) {
-                  Get.snackbar('Sukses', 'Data peminjaman APD berhasil dihapus',
-                      backgroundColor: Colors.green, colorText: Colors.white);
-                  // Panggil ulang permintaan data setelah penghapusan
-                  await controller.fetchPeminjamanApdList();
-                } else {
-                  Get.snackbar('Gagal', 'Gagal menghapus data peminjaman APD',
-                      backgroundColor: Colors.red, colorText: Colors.white);
-                }
-              },
-              child: const Text('Ya'),
-            ),
-          ],
-        );
-      },
-    );
   }
+
+  var chooseMonthYear;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +39,33 @@ class DataPeminjamanAPDPage extends GetView<PeminjamanApdController> {
             Navigator.pushReplacementNamed(context, '/dashboard');
           },
         ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              chooseMonthYear = await showMonthYearPicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2024),
+                  lastDate: DateTime(2027),
+                  initialMonthYearPickerMode: MonthYearPickerMode.month);
+              if (chooseMonthYear != null) {
+                chooseMonthYear =
+                    DateFormat('dd-MM-yyyy').format(chooseMonthYear);
+
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ExportPdfAPD(monthYear: chooseMonthYear.toString()),
+                    ));
+              }
+            },
+            icon: Icon(
+              Icons.picture_as_pdf,
+              color: Colors.red,
+            ),
+          ),
+        ],
       ),
       // body: FutureBuilder(
       //   future: controller.fetchPeminjamanApdList(),

@@ -154,12 +154,6 @@ class _QRCodePageState extends State<QRCodePage> {
 
           print('SCANNINGGGG');
           if (Constant.value_path != '') {
-            // Navigator.pushAndRemoveUntil(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) =>
-            //             DetailPage(sourceImg3D: '${VarGlobal.value_path}')),
-            //     (route) => false);
             Navigator.pushReplacementNamed(context, Constant.value_path);
           }
         }),

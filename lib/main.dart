@@ -12,6 +12,7 @@ import 'package:k3secure/routes/app_pages.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:k3secure/firebase_options.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 
 // @pragma('vm:entry-point')
 // Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -80,6 +81,9 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(textTheme: GoogleFonts.poppinsTextTheme()),
+          localizationsDelegates: [
+            MonthYearPickerLocalizations.delegate,
+          ],
           initialRoute: Routes.WelcomePage,
           getPages: AppPages.routes),
     );
